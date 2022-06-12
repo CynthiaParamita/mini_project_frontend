@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from "axios";
+import {loginUser} from "../API/user_API"
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,14 +10,13 @@ const LoginUser = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
- 
-    const loginUser = async (e) => {
+    const data = {email: email,password: password}
+    
+    const LoginUser = async (e) => {
         e.preventDefault();
-        const response= await axios.post('http://localhost:4000/user/login',{
-            email: email,
-            password: password
+        loginUser(data).then(function(response){
+            localStorage.setItem("Token",response.data.token)
         });
-        localStorage.setItem("Token",response.data.token)
         navigate("/main");
     }
     const myStyleDiv = {
@@ -34,7 +33,7 @@ const LoginUser = () => {
 
     return (
         <div className="DivHome">
-            <Form onSubmit={ loginUser } style={myStyleDiv}>
+            <Form onSubmit={ LoginUser } style={myStyleDiv}>
             <h3>Login</h3><br></br>
 
             <Form.Group className="mb-3">

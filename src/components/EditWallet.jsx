@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from "axios";
+import { updateWallet,getWalletByID } from '../API/wallet_API';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,20 +11,12 @@ const EditWallet = () => {
     const [income, setIncome] = useState('');
     const [expenses, setExpenses] = useState('');
     const navigation = useNavigate();
-    const { id } = useParams();
-    const token = localStorage.getItem('Token')
+    const { id } = useParams()
+    const data = {id: ID,income: income,expenses: expenses}
 
-    const updateProduct = async (e) => {
+    const UpdateWallet = async (e) => {
         e.preventDefault();
-        await axios.post('http://localhost:4000/wallet/update',{
-            id: ID,
-            income: income,
-            expenses: expenses
-        },{
-            headers: {
-              'Authorization': `${token}` 
-            }
-        });
+        updateWallet(data)
         navigation("/main");
     }
  
@@ -33,15 +25,12 @@ const EditWallet = () => {
     }, []);
  
     const getWalletbyID = async () => {
-        const response = await axios.get(`http://localhost:4000/wallet/get/detail/${id}`,{
-            headers: {
-              'Authorization': `${token}` 
-            }
-        });
-        setID(response.data.data[0].id);
-        setIncome(response.data.data[0].income);
-        setExpenses(response.data.data[0].expenses);
-    }
+        getWalletByID(id).then(function(response){
+            setID(response.data.data[0].id);
+            setIncome(response.data.data[0].income);
+            setExpenses(response.data.data[0].expenses);  
+    })}
+
     const myStyleDiv = {
         backgroundColor: "#90CAF9",
         paddingTop:"10%",
@@ -56,7 +45,7 @@ const EditWallet = () => {
      
     return (
         <div className="DivHome">
-            <Form onSubmit={ updateProduct } style={myStyleDiv}>
+            <Form onSubmit={ UpdateWallet } style={myStyleDiv}>
             <h3>Edit Wallet</h3><br></br>
             <Form.Group className="mb-3" >
                 <Form.Label>ID</Form.Label>

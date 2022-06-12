@@ -4,25 +4,22 @@ import Button from 'react-bootstrap/Button';
 import { Stack,Container } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
 import { useState, useEffect } from 'react'
-import axios from "axios";
+import { getAllWallet } from '../API/wallet_API';
 import { Link } from "react-router-dom";
 import './all.css'
 const Main = () => {
     const [wallets, setWallet] = useState([]);
-    const token = localStorage.getItem('Token')
 
     useEffect(() => {
         getWallet();
     },[]);
  
     const getWallet = async () => {
-        const response = await axios.get('http://localhost:4000/wallet/get/all',{
-            headers: {
-              'Authorization': `${token}` 
-            }
-        })
-        setWallet(response.data.data);
+        getAllWallet().then(function(response){
+            setWallet(response.data.data);
+        });
     }
+
     const styleTitle={
         margin:"3%",
         position: "absolute",
@@ -42,7 +39,7 @@ const Main = () => {
         width:"60%",
         textAlign:"center",
         position: "absolute",
-        top: "95%",
+        top: "100%",
         left: "50%",
         transform: "translate(-50%,-50%)"
     }

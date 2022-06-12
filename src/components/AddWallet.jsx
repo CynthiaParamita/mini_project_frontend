@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from "axios";
+import { insertWallet } from '../API/wallet_API';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,18 +10,11 @@ const AddWallet = () => {
     const [income, setIncome] = useState('');
     const [expenses, setExpenses] = useState('');
     const navigate = useNavigate();
-    const token = localStorage.getItem('Token')
+    const data = {income: income,expenses: expenses}
 
     const saveWallet = async (e) => {
         e.preventDefault();
-        await axios.post('http://localhost:4000/wallet/insert',{
-            income: income,
-            expenses: expenses
-        },{
-            headers: {
-              'Authorization': `${token}` 
-            }
-        });
+        insertWallet(data)
         navigate("/main");
     }
     const myStyleDiv = {

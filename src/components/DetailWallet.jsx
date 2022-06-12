@@ -1,28 +1,22 @@
 import { useState, useEffect } from 'react'
-import axios from "axios";
+import { getWalletByID } from '../API/wallet_API';
 import { useNavigate, useParams } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Form from 'react-bootstrap/Form'
 import './all.css'
  
 const DetailWallet = () => {
     const [wallets, setWallet] = useState([]);
     const navigation = useNavigate();
     const { id } = useParams();
-    const token = localStorage.getItem('Token')
 
     useEffect(() => {
         getWalletById();
     }, []);
  
     const getWalletById = async () => {
-        const response = await axios.get(`http://localhost:4000/wallet/get/detail/${id}`,{
-            headers: {
-              'Authorization': `${token}` 
-            }
-        });
-        setWallet(response.data.data);
+        getWalletByID(id).then(function(response){
+            setWallet(response.data.data);
+    })
     }
     const myStyleDiv = {
         backgroundColor: "#90CAF9",

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from "axios";
+import {registerUser} from "../API/user_API"
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
@@ -11,14 +11,12 @@ const AddUser = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
- 
+
+    const data={full_name: full_name,email: email,password: password}
+    
     const saveUser = async (e) => {
         e.preventDefault();
-        await axios.post('http://localhost:4000/user/register',{
-            full_name: full_name,
-            email: email,
-            password: password
-        });
+        registerUser(data);
         navigate("/login");
     }
 
